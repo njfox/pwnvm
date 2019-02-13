@@ -4,7 +4,11 @@
 sudo apt-get -y update
 sudo apt-get -y upgrade
 
+sudo apt-get -y install locales
+locale-gen en_US.UTF-8
+
 sudo apt-get -y install python3-pip
+sudo apt-get -y install python3-dev
 sudo apt-get -y install screen
 sudo apt-get -y install gdb gdb-multiarch
 sudo apt-get -y install unzip
@@ -47,18 +51,6 @@ cd
 mkdir tools
 cd tools
 
-# Capstone for pwndbg
-git clone https://github.com/aquynh/capstone
-pushd capstone
-git checkout -t origin/next
-sudo ./make.sh install
-cd bindings/python
-sudo python3 setup.py install # Ubuntu 14.04+, GDB uses Python3
-popd
-
-# pycparser for pwndbg
-sudo pip3 install pycparser # Use pip3 for Python3
-
 # Install radare2
 git clone https://github.com/radare/radare2
 pushd radare2
@@ -68,14 +60,6 @@ popd
 # Install binwalk
 git clone https://github.com/devttys0/binwalk
 pushd binwalk
-sudo python setup.py install
-popd
-
-# Uninstall capstone
-sudo pip2 uninstall capstone -y
-
-# Install correct capstone
-pushd capstone/bindings/python
 sudo python setup.py install
 popd
 
@@ -113,11 +97,20 @@ git clone https://github.com/longld/peda.git
 git clone https://github.com/zachriggle/pwndbg
 # Install gef
 git clone https://github.com/hugsy/gef.git
-# Install voltron
-git clone https://github.com/snare/voltron.git
-pushd voltron
-./install.sh
+pushd gef
+git checkout dev
 popd
+echo "source ~/tools/gef/gef.py" >> ~/.gdbinit
+echo "export LC_ALL=en_US.UTF-8" >> ~/.zshrc
+
+# Keystone, Capstone, and Unicorn
+sudo apt-get -y install cmake pkg-config libglib2.0-dev
+wget https://raw.githubusercontent.com/hugsy/stuff/master/update-trinity.sh
+bash ./update-trinity.sh
+sudo ldconfig
+
+#Ropper
+python3 -m pip install ropper
 
 # fixenv
 wget https://raw.githubusercontent.com/hellman/fixenv/master/r.sh
