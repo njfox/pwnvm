@@ -2,7 +2,8 @@
 
 # Updates
 sudo apt-get -y update
-sudo apt-get -y upgrade
+#sudo apt-get -y upgrade
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 sudo apt-get -y install locales
 locale-gen en_US.UTF-8
@@ -128,7 +129,8 @@ rm afl-latest.tgz
 # Enable 32bit binaries on 64bit host
 sudo dpkg --add-architecture i386
 sudo apt-get -y update
-sudo apt-get -y upgrade
+#sudo apt-get -y upgrade
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get -y install libc6:i386 libc6-dbg:i386 libncurses5:i386 libstdc++6:i386
 
 # Install z3 theorem prover
