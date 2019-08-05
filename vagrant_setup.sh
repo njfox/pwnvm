@@ -103,6 +103,7 @@ git checkout dev
 popd
 echo "source ~/tools/gef/gef.py" >> ~/.gdbinit
 echo "export LC_ALL=en_US.UTF-8" >> ~/.zshrc
+echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc
 
 # Keystone, Capstone, and Unicorn
 sudo apt-get -y install cmake pkg-config libglib2.0-dev
