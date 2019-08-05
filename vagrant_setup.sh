@@ -112,6 +112,7 @@ bash ./update-trinity.sh
 sudo ldconfig
 
 #Ropper
+python3 -m pip install --upgrade setuptools
 python3 -m pip install ropper
 
 # fixenv
