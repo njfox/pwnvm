@@ -24,17 +24,11 @@ sudo apt-get -y install 'binfmt*'
 sudo apt-get -y install libc6-armhf-armel-cross
 sudo apt-get -y install debian-keyring
 sudo apt-get -y install debian-archive-keyring
-sudo apt-get -y install emdebian-archive-keyring
-tee /etc/apt/sources.list.d/emdebian.list << EOF
-deb http://mirrors.mit.edu/debian squeeze main
-deb http://www.emdebian.org/debian squeeze main
-EOF
 sudo apt-get -y install libc6-mipsel-cross
-sudo apt-get -y install libc6-arm-cross
-mkdir /etc/qemu-binfmt
-ln -s /usr/mipsel-linux-gnu /etc/qemu-binfmt/mipsel
-ln -s /usr/arm-linux-gnueabihf /etc/qemu-binfmt/arm
-rm /etc/apt/sources.list.d/emdebian.list
+sudo apt-get -y install libc6-armel-cross libc6-armhf-cross libc6-arm64-cross
+sudo mkdir /etc/qemu-binfmt
+sudo ln -s /usr/mipsel-linux-gnu /etc/qemu-binfmt/mipsel
+sudo ln -s /usr/arm-linux-gnueabihf /etc/qemu-binfmt/arm
 
 # These are so the 64 bit vm can build 32 bit
 sudo apt-get -y install libx32gcc-4.8-dev
@@ -44,9 +38,10 @@ sudo apt-get -y install libc6-dev-i386
 sudo apt-get install binutils-arm-linux-gnueabi
 
 # Install Pwntools
-sudo apt-get -y install python2.7 python-pip python-dev git libssl-dev libffi-dev build-essential
-sudo pip install --upgrade pip
-sudo pip install --upgrade pwntools
+sudo apt-get -y install binutils-x86-64-linux-gnu
+sudo apt-get -y install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential
+python3 -m pip install -U --upgrade pip
+python3 -m pip install -U --upgrade git+https://github.com/Gallopsled/pwntools.git@dev3
 
 cd
 mkdir tools
@@ -61,7 +56,7 @@ popd
 # Install binwalk
 git clone https://github.com/devttys0/binwalk
 pushd binwalk
-sudo python setup.py install
+python setup.py install
 popd
 
 # Install Angr
@@ -72,24 +67,8 @@ source angr/bin/activate
 pip install angr --upgrade
 deactivate
 
-# oh-my-zsh
-sudo apt-get -y install zsh
-echo vagrant | sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-
 # tmux
-wget https://github.com/tmux/tmux/releases/download/2.6/tmux-2.6.tar.gz
-tar -zxvf tmux-2.6.tar.gz
-pushd tmux-2.6
-sudo apt-get -y install libevent-dev
-sudo apt-get -y install libncurses-dev
-./configure && make && sudo make install
-popd
-rm -rf tmux-2.6.tar.gz
-rm -rf tmux-2.6
-
-# fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+sudo apt-get -y install tmux
 
 ## GDB Tools
 # Install peda
@@ -112,21 +91,13 @@ bash ./update-trinity.sh
 sudo ldconfig
 
 #Ropper
-python3 -m pip install --upgrade setuptools
-python3 -m pip install ropper
+python3 -m pip install --user --upgrade setuptools
+python3 -m pip install --user ropper
 
 # fixenv
 wget https://raw.githubusercontent.com/hellman/fixenv/master/r.sh
 mv r.sh fixenv
 chmod +x fixenv
-
-# AFL Fuzzer
-wget http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz
-tar -zxvf afl-latest.tgz
-pushd afl-*
-make && sudo make install
-popd
-rm afl-latest.tgz
 
 # Enable 32bit binaries on 64bit host
 sudo dpkg --add-architecture i386
