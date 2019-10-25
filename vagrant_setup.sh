@@ -40,8 +40,7 @@ sudo apt-get install binutils-arm-linux-gnueabi
 # Install Pwntools
 sudo apt-get -y install binutils-x86-64-linux-gnu
 sudo apt-get -y install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential
-python3 -m pip install -U --upgrade pip
-python3 -m pip install -U --upgrade git+https://github.com/Gallopsled/pwntools.git@dev3
+python3 -m pip install --user git+https://github.com/Gallopsled/pwntools.git@dev3
 
 cd
 mkdir tools
